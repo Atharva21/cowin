@@ -28,7 +28,7 @@ class Data:
 		self.validate()
 
 	def parse_props(self):
-		self.pincode = str(self.get_prop("user.pincode"))
+		self.pincodes = str(self.get_prop("user.pincodes")).split(' ')
 		self.uri = str(self.get_prop("api.uri"))
 		self.findByPin = str(self.get_prop("api.endpoints.findByPin"))
 		self.calendarByPin = str(self.get_prop("api.endpoints.calendarByPin"))
@@ -54,27 +54,28 @@ class Data:
 			raise Exception(msg)
 	
 	def validate(self):
-		if(not (self.pincode.isnumeric() and len(self.pincode) == 6)):
-			raise Exception("Invalid Pincode")
+		for pincode in self.pincodes:
+			if(pincode.isalpha() or len(pincode) != 6):
+				raise Exception("Invalid Pincode")
 		if(self.botTimeout.isalpha()):
 			raise Exception("Invalid timeout")
 
-def getslots(data, date):
-	query = "?pincode="+data.pincode+"&date="+date
-	uri = data.uri + data.findByPin + query
+def getslots(uri):
 	my_headers = {
 		"accept": "application/json",
 		"Accept-Language": "hi_IN"
 	}
-	return requests.get(uri, headers=my_headers)
+	return json.loads(requests.get(uri, headers=my_headers).content.decode("utf-8"))
 
-def handleResponse(response):
-	slots = {}
+def printResponse(response):
+	if(len(response.get("sessions")) == 0):
+		print("-------- No Slots found-----------")
+		return
 	global NOT_FOUND
-	print(' '*52, 'slots')
+	print(' '*46, 'slots')
+	slots = {}
 	for session in response.get("sessions"):
 		slots[session.get("name")] = str(session.get("available_capacity_dose1"))
-		# print(session.get("name") + ": " + str(session.get("available_capacity_dose1")))
 
 	for hospital, slots in slots.items():
 		if(slots == '0'):
@@ -92,14 +93,20 @@ def run():
 	start_time = datetime.datetime.now()
 	try:
 		while(NOT_FOUND):
-			now = datetime.datetime.now()
-			today = "-".join(str(now).split(" ")[0].split("-")[::-1])
-			response = json.loads(getslots(data, today).content.decode("utf-8"))
 			os.system("cls")
+			now = datetime.datetime.now()
 			diff = now - start_time
 			print("uptime: ", str(diff).split('.')[0])
-			handleResponse(response)
+			#### per pincode: ####
+			today = "-".join(str(now).split(" ")[0].split("-")[::-1])
+			for pincode in data.pincodes:
+				print("\n\n" + bcolors.WARNING + pincode, bcolors.ENDC, end='')
+				query = "?pincode="+pincode+"&date="+today
+				uri = data.uri + data.findByPin + query
+				response = getslots(uri)
+				printResponse(response)
 			time.sleep(int(data.botTimeout))
+
 		if(not NOT_FOUND):
 			playsound.playsound("./resources/alarm.mp3")
 	except KeyboardInterrupt:
