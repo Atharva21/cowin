@@ -65,7 +65,7 @@ def handleResponse(response):
 	slots = {}
 	os.system('cls')
 	global COUNTER
-	print("############", COUNTER, "##############")
+	print("uptime", COUNTER, "s")
 	print(' '*52, 'slots')
 	COUNTER = (COUNTER+1)%36000;
 	for session in response.get("sessions"):
