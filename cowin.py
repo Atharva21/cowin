@@ -1,6 +1,8 @@
-import datetime, yaml, requests, re, json, time, os
+import datetime, yaml, requests, re, json, time, os, playsound
 
 COUNTER = 0
+NOT_FOUND = True
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -64,7 +66,7 @@ def getslots(data, date):
 def handleResponse(response):
 	slots = {}
 	os.system('cls')
-	global COUNTER
+	global COUNTER, NOT_FOUND
 	print("uptime", COUNTER, "s")
 	print(' '*52, 'slots')
 	COUNTER = (COUNTER+1)%36000;
@@ -76,19 +78,23 @@ def handleResponse(response):
 		if(slots == '0'):
 			clr = bcolors.FAIL
 		else:
+			NOT_FOUND = False
 			clr = bcolors.OKGREEN
 		hlen = len(hospital[:50])
 		buffer = ' '*(50-hlen)
 		print(hospital, buffer, ":", clr, slots, bcolors.ENDC)
 
 def run():
+	global NOT_FOUND
 	data = Data()
 	try:
-		while(True):
+		while(NOT_FOUND):
 			today = "-".join(str(datetime.datetime.now()).split(" ")[0].split("-")[::-1])
 			response = json.loads(getslots(data, today).content.decode("utf-8"))
 			handleResponse(response)
 			time.sleep(1)
+		if(not NOT_FOUND):
+			playsound.playsound("./resources/alarm.mp3")
 	except KeyboardInterrupt:
 		os.system("cls")
 		print("done")
