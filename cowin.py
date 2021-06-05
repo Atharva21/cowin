@@ -30,8 +30,8 @@ class Data:
 		self.calendarByPin = str(self.get_prop("api.endpoints.calendarByPin"))
 	
 	def get_prop(self, prop):
-		# @Param: takes a "." seperated string ex: api.findByPincode
-		# @Returns: api->findByPincodes prop from self.yml
+		# @Param: takes a "." seperated string ex: api.uri
+		# @Returns: api->uri prop from self.yml
 		try:
 			if(prop is None or len(prop) == 0):
 				raise Exception()
@@ -79,7 +79,7 @@ def handleResponse(response):
 			clr = bcolors.OKGREEN
 		hlen = len(hospital[:50])
 		buffer = ' '*(50-hlen)
-		print(hospital, buffer,":", clr, slots, bcolors.ENDC)
+		print(hospital, buffer, ":", clr, slots, bcolors.ENDC)
 
 def run():
 	data = Data()
