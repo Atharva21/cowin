@@ -6,4 +6,5 @@ seperate them by spaces) in the application.yml file under resources/
 you can also set other configurations in the application.yml like the bot timeout, (the time in seconds after which
 it will check for updates)
 
+finally, run the script (cmd: python cowin.py)
 if the slot is found for any of the pincodes, the updates will stop, and the tone will be played :3
