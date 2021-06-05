@@ -7,4 +7,4 @@ you can also set other configurations in the application.yml like the bot timeou
 it will check for updates)
 
 finally, run the script (cmd: python cowin.py)
-if the slot is found for any of the pincodes, the updates will stop, and the tone will be played :3
+if the slot is found for any of the pincodes, the updates will stop, and a tone will be played :3
