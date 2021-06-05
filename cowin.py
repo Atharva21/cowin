@@ -105,10 +105,10 @@ def run():
 				uri = data.uri + data.findByPin + query
 				response = getslots(uri)
 				printResponse(response)
+			if(not NOT_FOUND):
+				playsound.playsound("./resources/alarm.mp3")
+				break
 			time.sleep(int(data.botTimeout))
-
-		if(not NOT_FOUND):
-			playsound.playsound("./resources/alarm.mp3")
 	except KeyboardInterrupt:
 		os.system("cls")
 		print("done")
