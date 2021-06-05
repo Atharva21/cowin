@@ -1,0 +1,16 @@
+api:
+    uri: https://cdn-api.co-vin.in/api
+    endpoints:
+        findByPin: /v2/appointment/sessions/public/findByPin
+        findByDistrict: /v2/appointment/sessions/public/findByDistrict
+        calendarByPin: /v2/appointment/sessions/public/calendarByPin
+        calendarByDistrict: v2/appointment/sessions/public/calendarByDistrict
+
+user:
+    pincode: 414001
+
+
+
+# findByPin: /v2/appointment/sessions/public/findByPin?pincode=110001&date=31-03-2021 -H "accept: application/json" -H "Accept-Language: hi_IN"
+# findByDistrict: /v2/appointment/sessions/public/findByDistrict?district_id=512&date=31-03-2021" -H "accept: application/json" -H "Accept-Language: hi_IN"
+# calendarByPin: /v2/appointment/sessions/public/calendarByPin?pincode=414001&date=05-06-2021 -H "accept: application/json" -H "Accept-Language: hi_IN"
