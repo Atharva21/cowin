@@ -1,18 +1,20 @@
 import datetime, yaml, requests, re, json, time, os, playsound
 
-COUNTER = 0
 NOT_FOUND = True
 
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKCYAN = '\033[96m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	
+	def __str__(self):
+		return str(self.days) + " days   " + str(self.hours) + ":" + str(self.minutes) + ":" + self.seconds 
 
 class Data:
 	prop_file = "./resources/application.yml"
@@ -30,6 +32,7 @@ class Data:
 		self.uri = str(self.get_prop("api.uri"))
 		self.findByPin = str(self.get_prop("api.endpoints.findByPin"))
 		self.calendarByPin = str(self.get_prop("api.endpoints.calendarByPin"))
+		self.botTimeout = str(self.get_prop("bot.timeout"))
 	
 	def get_prop(self, prop):
 		# @Param: takes a "." seperated string ex: api.uri
@@ -53,6 +56,8 @@ class Data:
 	def validate(self):
 		if(not (self.pincode.isnumeric() and len(self.pincode) == 6)):
 			raise Exception("Invalid Pincode")
+		if(self.botTimeout.isalpha()):
+			raise Exception("Invalid timeout")
 
 def getslots(data, date):
 	query = "?pincode="+data.pincode+"&date="+date
@@ -65,21 +70,18 @@ def getslots(data, date):
 
 def handleResponse(response):
 	slots = {}
-	os.system('cls')
-	global COUNTER, NOT_FOUND
-	print("uptime", COUNTER, "s")
+	global NOT_FOUND
 	print(' '*52, 'slots')
-	COUNTER = (COUNTER+1)%36000;
 	for session in response.get("sessions"):
 		slots[session.get("name")] = str(session.get("available_capacity_dose1"))
 		# print(session.get("name") + ": " + str(session.get("available_capacity_dose1")))
 
 	for hospital, slots in slots.items():
 		if(slots == '0'):
-			clr = bcolors.FAIL
+			clr = bcolors.FAIL + bcolors.BOLD
 		else:
 			NOT_FOUND = False
-			clr = bcolors.OKGREEN
+			clr = bcolors.OKGREEN + bcolors.UNDERLINE
 		hlen = len(hospital[:50])
 		buffer = ' '*(50-hlen)
 		print(hospital, buffer, ":", clr, slots, bcolors.ENDC)
@@ -87,12 +89,17 @@ def handleResponse(response):
 def run():
 	global NOT_FOUND
 	data = Data()
+	start_time = datetime.datetime.now()
 	try:
 		while(NOT_FOUND):
-			today = "-".join(str(datetime.datetime.now()).split(" ")[0].split("-")[::-1])
+			now = datetime.datetime.now()
+			today = "-".join(str(now).split(" ")[0].split("-")[::-1])
 			response = json.loads(getslots(data, today).content.decode("utf-8"))
+			os.system("cls")
+			diff = now - start_time
+			print("uptime: ", str(diff).split('.')[0])
 			handleResponse(response)
-			time.sleep(1)
+			time.sleep(int(data.botTimeout))
 		if(not NOT_FOUND):
 			playsound.playsound("./resources/alarm.mp3")
 	except KeyboardInterrupt:

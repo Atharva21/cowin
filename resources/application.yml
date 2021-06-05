@@ -6,6 +6,9 @@ api:
         calendarByPin: /v2/appointment/sessions/public/calendarByPin
         calendarByDistrict: v2/appointment/sessions/public/calendarByDistrict
 
+bot:
+    timeout: 5 #(put value in seconds)
+
 user:
     pincode: 414001
 
