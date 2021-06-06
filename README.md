@@ -1,6 +1,8 @@
 # Cowin bot
 
-### This bot plays an alert sound whenever it finds a slot in given pincodes(seperated by " ") in application.yml under resources/.
+### This bot plays an alert sound whenever it finds a slot in given pincodes.
+
+* Specify pincodes in application.yml (seperated by " ") under resources/
 
 * Install requirements
 
