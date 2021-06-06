@@ -1,20 +1,14 @@
 import datetime, yaml, requests, re, json, time, os, playsound
+from colorama import init, Fore, Back
+init()
 
 NOT_FOUND = True
 
-class bcolors:
-	HEADER = '\033[95m'
-	OKBLUE = '\033[94m'
-	OKCYAN = '\033[96m'
-	OKGREEN = '\033[92m'
-	WARNING = '\033[93m'
-	FAIL = '\033[91m'
-	ENDC = '\033[0m'
-	BOLD = '\033[1m'
-	UNDERLINE = '\033[4m'
-	
-	def __str__(self):
-		return str(self.days) + " days   " + str(self.hours) + ":" + str(self.minutes) + ":" + self.seconds 
+def printc(color, text, line=True):
+	if(line):
+		print(color + text + Fore.RESET)
+	else:
+		print(color + text + Fore.RESET, end='')
 
 class Data:
 	prop_file = "./resources/application.yml"
@@ -69,7 +63,7 @@ def getslots(uri):
 
 def printResponse(response):
 	if(len(response.get("sessions")) == 0):
-		print("-------- No Slots found-----------")
+		printc(Fore.RED, "-------- No Slots found-----------")
 		return
 	global NOT_FOUND
 	print(' '*46, 'slots')
@@ -79,13 +73,23 @@ def printResponse(response):
 
 	for hospital, slots in slots.items():
 		if(slots == '0'):
-			clr = bcolors.FAIL + bcolors.BOLD
+			clr = Fore.RED
 		else:
 			NOT_FOUND = False
-			clr = bcolors.OKGREEN + bcolors.UNDERLINE
+			clr = Fore.GREEN
 		hlen = len(hospital[:50])
 		buffer = ' '*(50-hlen)
-		print(hospital, buffer, ":", clr, slots, bcolors.ENDC)
+		printc(Fore.BLUE, hospital, False)
+		print(buffer, ":", end='')
+		printc(clr, slots)
+		# print(hospital, buffer, ":", clr, slots)
+
+def clrscr():
+	# clears screen
+	if os.name == "nt":
+		os.system("cls")
+	else:
+		os.system("clear")
 
 def run():
 	global NOT_FOUND
@@ -93,14 +97,14 @@ def run():
 	start_time = datetime.datetime.now()
 	try:
 		while(NOT_FOUND):
-			os.system("cls")
+			clrscr()
 			now = datetime.datetime.now()
 			diff = now - start_time
 			print("uptime: ", str(diff).split('.')[0])
 			#### per pincode: ####
 			today = "-".join(str(now).split(" ")[0].split("-")[::-1])
 			for pincode in data.pincodes:
-				print("\n\n" + bcolors.WARNING + pincode, bcolors.ENDC, end='')
+				print("\n\n" + Fore.YELLOW + pincode, Fore.RESET, end='')
 				query = "?pincode="+pincode+"&date="+today
 				uri = data.uri + data.findByPin + query
 				response = getslots(uri)
@@ -110,8 +114,7 @@ def run():
 				break
 			time.sleep(int(data.botTimeout))
 	except KeyboardInterrupt:
-		os.system("cls")
-		print("done")
+		printc(Fore.GREEN, "done")
 
 if __name__ == "__main__":
 	run()
