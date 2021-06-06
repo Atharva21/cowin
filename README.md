@@ -8,7 +8,7 @@
 
       pip install -r requirements.txt
       
-* Set pincodes and other configurations in application.yml file
+* Set other configurations in application.yml file like bot timeout (the seconds after which bot will check for updates)
 
 * Run script
 
