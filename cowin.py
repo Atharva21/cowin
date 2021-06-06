@@ -100,8 +100,8 @@ def run():
 			now = datetime.datetime.now()
 			diff = now - start_time
 			print("uptime: ", str(diff).split('.')[0])
-			#### per pincode: ####
 			today = "-".join(str(now).split(" ")[0].split("-")[::-1])
+			#### per pincode: ####
 			for pincode in data.pincodes:
 				print("\n\n" + Fore.YELLOW + pincode, Fore.RESET, end='')
 				query = "?pincode="+pincode+"&date="+today

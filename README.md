@@ -2,7 +2,7 @@
 
 ### This bot plays an alert sound whenever it finds a slot in given pincodes.
 
-* Specify pincodes in application.yml (seperated by " ") under resources/
+* Specify pincodes (seperated by " ") in application.yml under resources/
 
 * Install requirements
 
@@ -13,3 +13,5 @@
 * Run script
 
        python cowin.py
+
+* API Link: https://apisetu.gov.in/public/api/cowin#
