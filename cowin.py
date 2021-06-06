@@ -82,7 +82,6 @@ def printResponse(response):
 		printc(Fore.BLUE, hospital, False)
 		print(buffer, ":    ", end='')
 		printc(clr, slots)
-		# print(hospital, buffer, ":", clr, slots)
 
 def clrscr():
 	# clears screen
