@@ -5,4 +5,8 @@ idna==2.10
 playsound==1.2.2
 PyYAML==5.4.1
 requests==2.25.1
+ruamel.yaml==0.17.7
+ruamel.yaml.clib==0.2.2
 urllib3==1.26.5
+vext==0.7.6
+vext.gi==0.7.4
