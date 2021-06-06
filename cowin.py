@@ -72,7 +72,7 @@ def printResponse(response):
 		slots[session.get("name")] = str(session.get("available_capacity_dose1"))
 
 	for hospital, slots in slots.items():
-		if(slots == '0'):
+		if(int(slots) < 2):
 			clr = Fore.RED
 		else:
 			NOT_FOUND = False
@@ -80,7 +80,7 @@ def printResponse(response):
 		hlen = len(hospital[:50])
 		buffer = ' '*(50-hlen)
 		printc(Fore.BLUE, hospital, False)
-		print(buffer, ":", end='')
+		print(buffer, ":    ", end='')
 		printc(clr, slots)
 		# print(hospital, buffer, ":", clr, slots)
 
