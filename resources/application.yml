@@ -10,4 +10,6 @@ bot:
     timeout: 10 #(put value in seconds)
 
 user:
+    to_email: test@example.com
+    from_email: test@example.com
     pincodes: 414001 414005 
